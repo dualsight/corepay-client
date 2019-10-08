@@ -12,7 +12,7 @@ $ npm install --save corepay-client
 ## Usage
 
 ```js
-const corepayConnector = require('../lib/index')
+const corepayConnector = require('corepay-client')
 const corepay = corepayConnector.init({
   port: 3001,
   path: '/webhook',
