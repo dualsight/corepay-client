@@ -14,20 +14,30 @@ $ npm install --save corepay-client
 ```js
 const corepayConnector = require('corepay-client')
 const corepay = corepayConnector.init({
-  port: 3001,
-  path: '/webhook',
+  port: 3001, // webhook port
+  path: '/webhook', // webhook URI
   remote: 'http://localhost:8700/mycryptoexchange', // Corepay app endpoint
   secret: '<app secret as configured in Corepay>'
 })
 
+// Listen for deposits
 corepay.on('deposit_alert', (deposits) => {
-  console.log('Deposits =>', deposits)
+  console.log(JSON.stringify(deposits, null, 2))
 })
 
+// Check Ethereum address balance
+corepay.core('ethereum').queryBalance({
+  address: '0xbcf783a8d2965700ac00795f022746ff6d034338'
+})
+  .then(data => console.log(data))
+  .catch(err => console.error(err.message))
+
+
+// Check Ethereum address (raw API method)
 corepay.exec(
-  'get-deposit-address',
-  'bitcoin',
-  { meta: { type: 'testnet' } }
+  'query-balance',
+  'ethereum',
+  { address: '0xbcf783a8d2965700ac00795f022746ff6d034338' }
 )
   .then(res => console.log(res.result))
   .catch(err => console.error(err.message))
